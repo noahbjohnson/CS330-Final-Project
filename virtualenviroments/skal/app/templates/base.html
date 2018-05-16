@@ -15,6 +15,7 @@
     {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}">Login</a>
     {% else %}
+        <a href="{{ url_for('newest') }}">Newest</a>
         <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
         <a href="{{ url_for('logout') }}">Logout</a>
     {% endif %}
@@ -30,6 +31,10 @@
     {% endif %}
 {% endwith %}
 {% block content %}{% endblock %}
+
+<footer>
+    <a href="https://www.vecteezy.com">Vector Design by www.Vecteezy.com</a>
+</footer>
 </body>
 
 </html>
