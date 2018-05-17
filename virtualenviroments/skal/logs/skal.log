@@ -24,3 +24,12 @@ Traceback (most recent call last):
     raise RuntimeError('The session is unavailable because no secret '
 RuntimeError: The session is unavailable because no secret key was set.  Set the secret_key on the application to something unique and secret.
 2018-05-17 05:46:18,881 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:70]
+2018-05-17 06:03:01,067 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:04:14,244 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:04:23,280 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:04:53,669 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:04:59,065 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:07:34,894 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:07:47,505 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:08:35,330 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
+2018-05-17 06:08:40,872 INFO: Skal startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:75]
