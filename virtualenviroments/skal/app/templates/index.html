@@ -2,14 +2,14 @@
 
 {% block content %}
 <body>
-    <h1>Skål, {{ current_user.username }}!</h1>
+    <h1 class="greeting">Skål, {{ current_user.username }}!</h1>
 
     {% if form %}
-    <form action="" method="post">
+    <form action="" method="post" class="post-form">
         {{ form.hidden_tag() }}
         <p>
             {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
+            {{ form.post(rows=4) }}<br>
             {% for error in form.post.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -22,10 +22,10 @@
         {% include '_post.html' %}
     {% endfor %}
 {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
+    <a href="{{ prev_url }}" class="pagination">&xlArr;</a>
     {% endif %}
     {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
+    <a href="{{ next_url }}" class="pagination">&xrArr;</a>
     {% endif %}
 </body>
 {% endblock %}

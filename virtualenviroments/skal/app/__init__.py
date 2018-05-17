@@ -17,7 +17,7 @@ login.login_view = 'login'
 
 mail = Mail(app)
 
-from app import routes, models
+from app import routes, models, errors
 
 if not app.debug:
     if app.config['MAIL_SERVER']:

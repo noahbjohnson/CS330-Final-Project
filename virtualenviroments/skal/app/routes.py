@@ -1,9 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Post
+from app.models import User, Post, Comment, Like
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -100,11 +100,13 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         current_user.enable_last_seen = form.enable_last_seen.data
+        current_user.avatar = form.avatar.data
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
+        form.avatar.data = current_user.avatar
         form.about_me.data = current_user.about_me
         form.enable_last_seen.data = current_user.enable_last_seen
     return render_template('edit_profile.html', title='Edit Profile',
@@ -154,3 +156,38 @@ def newest():
         if posts.has_prev else None
     return render_template('index.html', title='Newest', posts=posts.items,
                            next_url=next_url, prev_url=prev_url)
+
+@app.route('/like/<post_id>', methods=['GET', 'POST'])
+@login_required
+def like(post_id):
+    current_user.like(Post.query.get(post_id))
+    flash("post liked!")
+    current_user.update_stats()
+    Post.query.get(post_id).author.update_stats()
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route('/unlike/<post_id>', methods=['GET', 'POST'])
+@login_required
+def unlike(post_id):
+    current_user.unlike(Post.query.get(post_id))
+    current_user.update_stats()
+    Post.query.get(post_id).author.update_stats()
+    db.session.commit()
+    flash("post unliked!")
+    return redirect(url_for('index'))
+
+
+@app.route('/postdetail/<post_id>', methods=['GET', 'POST'])
+@login_required
+def postdetail(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        c = Comment(user_id=current_user.id, post_id=post_id, body=form.comment.data)
+        db.session.add(c)
+        db.session.commit()
+        flash('Your comment has been posted.')
+        return redirect(url_for('postdetail', post_id=post_id))
+    return render_template('post_detail.html', title='Post View',
+                           form=form, post=Post.query.get(post_id))

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from app.models import User
 from flask_login import current_user
@@ -35,6 +35,8 @@ class RegistrationForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=64)])
+    avatar = SelectField('Choose an Avatar', choices=[
+        ('helmet.png', 'Helmet'), ('axe.png', 'Axe'), ('ship.png', 'Ship')])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     enable_last_seen = BooleanField('Show last seen time on your profile')
     submit = SubmitField('Submit')
@@ -49,5 +51,10 @@ class EditProfileForm(FlaskForm):
 
 class PostForm(FlaskForm):
     post = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=5, max=1400)])
+        DataRequired(), Length(min=5, max=500)])
+    submit = SubmitField('Submit')
+
+class CommentForm(FlaskForm):
+    comment = TextAreaField('Comment: ', validators=[
+        DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')

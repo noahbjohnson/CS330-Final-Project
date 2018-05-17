@@ -33,6 +33,11 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    verified = db.Column(db.Boolean, default=False)
+    likes = db.relationship('Like', backref='author', lazy='dynamic')
+    post_count = db.Column(db.Integer, index=True, default=0)
+    banned = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -71,17 +76,110 @@ class User(UserMixin, db.Model):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
+    def likes_post(self, post):
+        return Like.query.filter_by(user_id=self.id).filter_by(post_id=post.id).first() is not None
+
+    def like(self, post):
+        if not self.likes_post(post):
+            db.session.add(Like(user_id=self.id, post_id=post.id))
+
+    def unlike(self, post):
+        if self.likes_post(post):
+            db.session.delete(Like.query.filter_by(user_id=self.id).filter_by(post_id=post.id).first())
+
+    def likes_comment(self, comment):
+        return Like.query.filter_by(user_id=self.id).filter_by(comment_id=comment.id).first() is not None
+
+    def like_comment(self, comment):
+        if not self.likes_comment(comment):
+            db.session.add(Like(user_id=self.id, comment_id=comment.id))
+
+    def unlike_comment(self, comment):
+        if self.like_comment(comment):
+            db.session.delete(Like.query.filter_by(user_id=self.id).filter_by(comment_id=comment.id).first())
+
+    def update_stats(self):
+        post_list = Post.query.filter_by(user_id=self.id).all()
+        comment_list = Comment.query.filter_by(user_id=self.id).all()
+
+        posts = len(post_list)
+        clout = 0
+
+        for post in post_list:
+            clout += post.get_like_count()
+
+        for comment in comment_list:
+            clout += comment.get_like_count()
+
+        self.post_count = posts
+        self.clout = clout
+
+    def ban(self):
+        self.banned = True
+
+    def unban(self):
+        self.banned = False
+
+    def create_comment(self, post, body):
+        c = Comment()
+        c.post_id = post.id
+        c.body = body
+        c.user_id = self.id
+        db.session.add(c)
+
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(1400))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    likes = db.relationship('Like', backref='post', lazy='dynamic')
 
     def __repr__(self):
-        return '<Post: {}>'.format(self.body)
+        return '<Post: {}...>'.format(self.body[:50])
+
+    def get_comments(self):
+        return Comment.query.filter_by(post_id=self.id).order_by(Comment.timestamp.desc())
+
+    def get_comment_count(self):
+        return len(Comment.query.filter_by(post_id=self.id).all())
+
+    def get_comment_id(self):
+        return "#" + str(self.id)
+
+    def get_like_count(self):
+        return len(Like.query.filter_by(post_id=self.id).all())
 
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), index=True)
+    likes = db.relationship('Like', backref='comment', lazy='dynamic')
 
+    def __repr__(self):
+        return '<Comment: {}>'.format(self.body)
+
+    def get_like_count(self):
+        return len(Like.query.filter_by(comment_id=self.id).all())
+
+
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), index=True)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), index=True)
+
+    def __repr__(self):
+        if self.post_id:
+            value = "post " + str(self.post_id)
+        else:
+            value = "comment " + str(self.comment_id)
+        return '<User number {} likes: {}>'.format(self.user_id, value)
 
 # TODO: add email confirmation system

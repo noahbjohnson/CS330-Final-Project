@@ -1,0 +1,54 @@
+{% if post.media %}
+<table class="media-post post">
+{% else %}
+<table class="post">
+{% endif %}
+    <tr valign="center" class="post-main">
+        <td class="post-author">
+            <span class="post-author-image">
+            <img src="{{ post.author.get_avatar() }}" height="36">
+            </span>
+            <span class="post-author-info">
+            <a href="{{ url_for('user', username=post.author.username) }}">
+                    {{ post.author.username }} </a><br>
+                <p>Posts:  {{ post.author.post_count }}</p>
+            </span>
+        </td>
+        <td class="post-body">
+            {{ post.body }}
+        </td>
+    </tr>
+            <tr valign="center" class="post-bar">
+            <td colspan="2">
+            <span class="post-bar-actions">
+                {% if current_user.likes_post(post) %}
+                    <span class="post-bar-link post-bar-unlike" onclick="actionHandler('{{ url_for('unlike', post_id=post.id) }}')">Unlike</span>
+                {% else %}
+                    <span class="post-bar-link post-bar-like" onclick="actionHandler('{{ url_for('like', post_id=post.id) }}')">Like</span>
+                {% endif %}
+            </span>
+            <span class="post-bar-info">
+                <span class="post-bar-link post-bar-comments" onclick="toggleCommentBlock({{ post.id }})">
+                    {{ post.get_comment_count() }} Comments
+                </span>
+                <span class="post-bar-likes post-bar-link">
+                    {% if post.get_like_count() == 1 %}
+                    1 Like
+                    {% elif post.get_like_count() > 1 %}
+                    {{ post.get_like_count() }} Likes
+                    {% else %}
+                    0 Likes
+                    {% endif %}
+                </span>
+            </span>
+            </td>
+            </tr>
+            <tr id="{{ post.id }}" class="hidden">
+            {% if post.get_comments().first() %}
+        {% for comment in post.get_comments() %}
+            {% include '_comment.html' %}
+        {% endfor %}
+            {% endif %}
+            </tr>
+
+</table>

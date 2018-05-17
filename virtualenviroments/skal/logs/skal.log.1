@@ -1,17 +1,4 @@
-2018-05-16 00:52:06,521 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 00:52:15,007 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 00:53:15,163 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 00:54:34,271 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 00:59:14,293 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 00:59:21,487 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:14:32,580 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:15:43,157 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:21:49,343 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:21:55,653 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:36:16,458 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:48:52,582 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:48:55,607 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:49:02,834 ERROR: Exception on /feed [GET] [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py:1761]
+2018-05-16 22:40:16,308 ERROR: Exception on /postdetail/543 [GET] [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py:1761]
 Traceback (most recent call last):
   File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -27,17 +14,66 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask_login/utils.py", line 261, in decorated_view
     return func(*args, **kwargs)
-  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/routes.py", line 141, in feed
-    page, app.config['POSTS_PER_PAGE'], False
-NameError: name 'page' is not defined
-2018-05-16 01:50:12,053 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:51:14,757 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 01:53:44,648 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 02:02:24,872 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:30]
-2018-05-16 02:19:57,191 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:20:23,547 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:24:41,033 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:25:37,530 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:30:41,022 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:30:48,263 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
-2018-05-16 02:38:34,077 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/routes.py", line 193, in postdetail
+    form=form)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/templating.py", line 135, in render_template
+    context, ctx.app)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/templating.py", line 117, in _render
+    rv = template.render(context)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/post_detail.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/base.html", line 71, in top-level template code
+    {% block content %}{% endblock %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/post_detail.html", line 4, in block "content"
+    {% if post.media %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 430, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'post' is undefined
+2018-05-16 22:41:11,656 ERROR: Exception on /postdetail/543 [GET] [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py:1761]
+Traceback (most recent call last):
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask_login/utils.py", line 261, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/routes.py", line 193, in postdetail
+    form=form)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/templating.py", line 135, in render_template
+    context, ctx.app)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/flask/templating.py", line 117, in _render
+    rv = template.render(context)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/post_detail.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/base.html", line 71, in top-level template code
+    {% block content %}{% endblock %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/templates/post_detail.html", line 4, in block "content"
+    {% if post.media %}
+  File "/Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/skal/lib/python3.6/site-packages/jinja2/environment.py", line 430, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'post' is undefined
+2018-05-16 22:41:15,353 INFO: Microblog startup [in /Users/noahjohnson/Documents/GitHub/CS330-Final-Project/virtualenviroments/skal/app/__init__.py:47]
