@@ -1,3 +1,4 @@
 /virtualenviroments/skal/.idea/*
 /virtualenviroments/skal/.vscode/*
 *__pycache__*
+virtualenviroments/skal/.env
