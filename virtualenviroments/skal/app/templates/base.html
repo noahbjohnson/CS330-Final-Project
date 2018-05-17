@@ -17,6 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {# Custom Dependencies #}
     <script src="{{ url_for('static', filename='js/skal.js') }}"></script>
+    {{ moment.include_moment() }}
 {% endblock %}
 
 {% block navbar %}

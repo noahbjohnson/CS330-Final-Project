@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db, bootstrap
+from app import app, db, limiter
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Post, Comment, Like
+from app.models import User, Post, Comment
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.webmail import send_password_reset_email, send_verification_email
@@ -13,9 +13,16 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
+
+@limiter.request_filter
+def whitelist_get():
+    return request.method == "GET"
+
+
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("5 per hour", key_func=lambda: current_user.id)
 def index():
     form = PostForm()
     if form.validate_on_submit():
@@ -36,6 +43,7 @@ def index():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10 per hour")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -60,6 +68,7 @@ def logout():
 
 
 @app.route('/register', methods=['GET', 'POST'])
+@limiter.limit("100 per hour")
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -92,6 +101,7 @@ def user(username):
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("5 per hour", key_func=lambda: current_user.username)
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
@@ -116,6 +126,7 @@ def edit_profile():
 
 @app.route('/follow/<username>')
 @login_required
+@limiter.limit("20 per hour", key_func=lambda: current_user.username)
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -132,6 +143,7 @@ def follow(username):
 
 @app.route('/unfollow/<username>')
 @login_required
+@limiter.limit("20 per hour", key_func=lambda: current_user.username)
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -160,6 +172,7 @@ def newest():
 
 @app.route('/like/<post_id>', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("50 per hour", key_func=lambda: current_user.username)
 def like(post_id):
     current_user.like(Post.query.get(post_id))
     flash("post liked!")
@@ -182,6 +195,7 @@ def unlike(post_id):
 
 @app.route('/postdetail/<post_id>', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("20 per hour", key_func=lambda: current_user.username)
 def postdetail(post_id):
     form = CommentForm()
     if form.validate_on_submit():
@@ -195,6 +209,7 @@ def postdetail(post_id):
 
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
+@limiter.limit("20 per hour")
 def reset_password_request():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -210,6 +225,7 @@ def reset_password_request():
 
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
+@limiter.limit("20 per hour")
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -226,6 +242,7 @@ def reset_password(token):
 
 
 @app.route('/verify/<token>', methods=['GET', 'POST'])
+@limiter.limit("20 per hour")
 def verify(token):
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -233,11 +250,13 @@ def verify(token):
     if user:
         flash('Account verified!')
         user.verified = True
+        db.session.commit()
         return redirect(url_for('index'))
     else:
         return redirect(url_for('index'))
 
 @app.route('/verify_request', methods=['GET', 'POST'])
+@limiter.limit("20 per hour")
 def verify_request():
     if current_user.is_authenticated:
         return redirect(url_for('index'))

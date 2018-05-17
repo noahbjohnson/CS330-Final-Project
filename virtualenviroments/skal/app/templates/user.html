@@ -7,7 +7,15 @@
             <td>
                 <h1>User: {{ user.username }}</h1>
                 {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-                {% if user.enable_last_seen %}<p>Last seen on: {{ user.last_seen }}</p>{% endif %}
+                <p>Prestige: {{ user.clout }}</p>
+                <p>Posts: {{ user.post_count }}</p>
+            <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+                {% if user.enable_last_seen %}
+                {% if user.last_seen %}
+                <p>Last seen: {{ moment(user.last_seen).calendar() }}</p>
+                    <p>Last Post: {{ moment(posts[0].timestamp).fromNow() }}</p>
+                {% endif %}
+                {% endif %}
                 {% if user == current_user %}
                     <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
                 {% elif not current_user.is_following(user) %}
@@ -22,10 +30,19 @@
     {% for post in posts %}
         {% include '_post.html' %}
     {% endfor %}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+
+    <nav aria-label="..." class="pagination-control">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> Newer posts
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    Older posts <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 {% endblock %}

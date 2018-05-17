@@ -9,3 +9,7 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template('errors/500.html'), 500
+
+@app.errorhandler(429)
+def ratelimit_handler(error):
+    return render_template('errors/429.html', error=error), 429

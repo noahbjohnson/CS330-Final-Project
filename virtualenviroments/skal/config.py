@@ -32,3 +32,6 @@ class Config(object):
 
     # max posts per page for pagination
     POSTS_PER_PAGE = 15
+
+    # supported languages
+    LANGUAGES = ['en', 'es', 'fr']

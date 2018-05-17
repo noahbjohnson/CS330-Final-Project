@@ -8,6 +8,8 @@ import os
 from logging.handlers import RotatingFileHandler, SMTPHandler
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
+from flask_limiter import Limiter
 
 # Initialize app and load configuration from file
 app = Flask(__name__)
@@ -26,6 +28,12 @@ mail = Mail(app)
 
 # Bootstrap references
 bootstrap = Bootstrap(app)
+
+# flask-moment references
+moment = Moment(app)
+
+# flask-limiter references
+limiter = Limiter(app)
 
 # Import app for rest of module
 from app import routes, models, errors
@@ -60,3 +68,4 @@ if not app.debug:
     # Startup console
     app.logger.setLevel(logging.INFO)
     app.logger.info('Skal startup')
+
