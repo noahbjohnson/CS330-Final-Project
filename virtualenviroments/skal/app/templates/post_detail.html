@@ -1,21 +1,17 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
     <span onclick="goBack()" class="back_link">Go Back</span>
-{% if post.media %}
-<div class="media-post post container">
-{% else %}
-<div class="post container">
-{% endif %}
-    <div class="post-main row">
-        <div class="post-author col-sm-4">
+    <div class="post row">
+        <div class="post-author col-sm-2">
             <img src="{{ post.author.get_avatar() }}">
             <a href="{{ url_for('user', username=post.author.username) }}">
-                    {{ post.author.username }}</a><br>
+                    {{ post.author.username }}</a>
                 <p>Posts:  {{ post.author.post_count }}</p>
             <p>Prestige: {{ post.author.clout }}</p>
         </div>
-        <div class="post-body col-sm-8">
+        <div class="post-body col-sm-10">
             {{ post.body }}
         </div>
     </div>
@@ -42,34 +38,12 @@
                 </span>
             </div>
             </div>
-            <div id="{{ post.id }}" class="comment-block">
+            <div class="comment-block">
                 {% if post.get_comments().first() %}
             {% for comment in post.get_comments() %}
                 {% include '_comment.html' %}
             {% endfor %}
                 {% endif %}
-
-                <form action="" method="post">
-                    {{ form.hidden_tag() }}
-
-                    {{ form.comment.label }}
-                    {{ form.comment }}
-                    {% for error in form.comment.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-
-                    {{ form.submit.label }}
-                    {{ form.submit }}
-                </form>
+                {{ wtf.quick_form(form) }}
             </div>
-
-
-</div>
-
-
-
-
-
-
-
 {% endblock %}

@@ -1,11 +1,11 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app
-from app import db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm
+from app import app, db, bootstrap
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, CommentForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Post, Comment, Like
 from werkzeug.urls import url_parse
 from datetime import datetime
+from app.webmail import send_password_reset_email, send_verification_email
 
 @app.before_request
 def before_request():
@@ -41,9 +41,9 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid email or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -69,7 +69,8 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        send_verification_email(user)
+        flash('Please check your inbox for a confirmation email.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -191,3 +192,61 @@ def postdetail(post_id):
         return redirect(url_for('postdetail', post_id=post_id))
     return render_template('post_detail.html', title='Post View',
                            form=form, post=Post.query.get(post_id))
+
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                           title='Reset Password', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
+
+
+@app.route('/verify/<token>', methods=['GET', 'POST'])
+def verify(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_verify_token(token)
+    if user:
+        flash('Account verified!')
+        user.verified = True
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/verify_request', methods=['GET', 'POST'])
+def verify_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_verification_email(user)
+        flash('Check your email for the instructions to verify your account')
+        return redirect(url_for('login'))
+    return render_template('verify_request.html',
+                           title='Reset Password', form=form)

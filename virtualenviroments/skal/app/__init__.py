@@ -7,19 +7,32 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler, SMTPHandler
 from flask_mail import Mail
+from flask_bootstrap import Bootstrap
 
+# Initialize app and load configuration from file
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Database references
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# User account references
 login = LoginManager(app)
 login.login_view = 'login'
 
+# Mail settings
 mail = Mail(app)
 
+# Bootstrap references
+bootstrap = Bootstrap(app)
+
+# Import app for rest of module
 from app import routes, models, errors
 
+# Error handling
 if not app.debug:
+    # Email alert settings
     if app.config['MAIL_SERVER']:
         auth = None
         if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
@@ -30,10 +43,11 @@ if not app.debug:
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
             fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-            toaddrs=app.config['ADMINS'], subject='Microblog Failure',
+            toaddrs=app.config['ADMINS'], subject='Skal Failure',
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
+    # App Log settings
     if not os.path.exists('logs'):
         os.mkdir('logs')
     file_handler = RotatingFileHandler('logs/skal.log', maxBytes=10240,
@@ -43,14 +57,6 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
 
+    # Startup console
     app.logger.setLevel(logging.INFO)
-    app.logger.info('Microblog startup')
-
-# flask db migrate -m "message"
-# flask db upgrade
-# db.session.delete(value)
-# export MAIL_SERVER=smtp.googlemail.com
-# export MAIL_PORT=587
-# export MAIL_USE_TLS=1
-# export MAIL_USERNAME=skalappservice@gmail.com
-# export MAIL_PASSWORD=<your-gmail-password>
+    app.logger.info('Skal startup')

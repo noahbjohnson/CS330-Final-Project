@@ -13,6 +13,9 @@ footer{
     bottom: 0;
     background-color: #555555;
 }
+.content-block{
+    width: 80%;
+}
 
 /*navbar settings*/
 .navbar{
@@ -20,38 +23,45 @@ footer{
     border-color: #555555;
     color: #000000;
 }
+.pagination-control{
+    padding-bottom: 10rem;
+}
 
 /*form settings*/
 form input{
     color: #000000;
 }
+form textarea{
+    color: #000000;
+}
+form select{
+    color: #000000;
+}
 
 /*Post Styles*/
 .post{
-    width: 80%;
+    width: 100%;
     background-color: #11557C;
-    margin-bottom: 2rem;
+    margin-top: 2rem;
     color: ghostwhite;
-    display: table;
-    height: auto;
 }
 .post-author {
-    width: 15rem;
     background-color: #485F6E;
+    text-align: center;
 }
 .post-author img{
-    height: 10rem;
-    padding-right: 2.5rem;
-    padding-left: auto;
-    margin: auto;
+    height: 9rem;
 }
 .post-author a{
     color: ghostwhite;
     text-decoration: underline gray;
 }
+.post-author p {
+    margin: 0px;
+}
 .post-body{
-    text-align: right;
-    padding: 2vw;
+    text-align: left;
+    padding: 2rem;
 }
 .post-bar{
     background-color: #555555;
@@ -59,6 +69,21 @@ form input{
 }
 .post-bar-info{
     text-align: right;
+}
+
+@media only screen and (max-width: 768px){
+    .post-author img{
+        height: 5rem;
+    }
+    .post-author p{
+        display: none;
+    }
+    .post-body{
+        text-align: center;
+    }
+    .content-block{
+        width: 100%;
+    }
 }
 
 /*Comment Styles*/

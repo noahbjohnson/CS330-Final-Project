@@ -7,10 +7,15 @@ from datetime import datetime, timedelta
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email Address', validators=[DataRequired(),Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+    def validate_email(self, email):
+        if not User.query.filter_by(email=email.data).first().verified:
+            raise ValidationError('Account requires email verification')
+
 
 
 class RegistrationForm(FlaskForm):
@@ -49,12 +54,26 @@ class EditProfileForm(FlaskForm):
             raise ValidationError('You cannot change your username more than once in a week. Please wait: {}'
                                   .format(str((current_user.username_last_changed+timedelta(days=7))-datetime.utcnow())))
 
+
 class PostForm(FlaskForm):
     post = TextAreaField('Say something', validators=[
         DataRequired(), Length(min=5, max=500)])
     submit = SubmitField('Submit')
 
+
 class CommentForm(FlaskForm):
     comment = TextAreaField('Comment: ', validators=[
         DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Submit')
